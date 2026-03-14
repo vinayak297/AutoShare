@@ -1,3 +1,21 @@
+.rides-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.rides-column {
+  width: 350px;
+}
+
+.ride-card {
+  border: 1px solid #444;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background-color: #1e1e1e;
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;
