@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import './App.css';
 
 const currentUser = "user1";
+const userName = "user1";
 
 function App() {
 
@@ -14,8 +15,12 @@ function App() {
 
   const myRides = rides.filter((ride) => ride.creatorId === currentUser);
   const availableRides = rides.filter(
-  (ride) => ride.creatorId !== currentUser && ride.passengers < ride.capacity
+  (ride) =>
+    !ride.passengerNames?.includes(userName) &&
+    ride.creatorId !== userName &&
+    ride.passengers < ride.capacity
 );
+
   function formatDateTime(timestamp) {
   if (!timestamp) return "";
 
@@ -84,83 +89,114 @@ function App() {
 }
 
   return (
-    <div>
 
-      <h1>AutoShare</h1>
+<div className="app">
 
-      {/* Create Ride */}
+  <header className="header">
+    🚖 AutoShare
+  </header>
 
-      <h2>Create Ride</h2>
+  {/* Create Ride */}
 
-      <input
-        type="text"
-        placeholder="Stand Name"
-        value={standName}
-        onChange={(e) => setStandName(e.target.value)}
-      />
+  <div className="create-section">
 
-      <input
-        type="text"
-        placeholder="Destination"
-        value={destination}
-        onChange={(e) => setDestination(e.target.value)}
-      />
+    <input
+      type="text"
+      placeholder="Stand Name"
+      value={standName}
+      onChange={(e)=>setStandName(e.target.value)}
+    />
 
-      <input
-        type="number"
-        placeholder="Capacity"
-        value={capacity}
-        onChange={(e) => setCapacity(e.target.value)}
-      />
+    <input
+      type="text"
+      placeholder="Destination"
+      value={destination}
+      onChange={(e)=>setDestination(e.target.value)}
+    />
 
-      <button onClick={createRide}>
-        Create Ride
-      </button>
+    <input
+      type="number"
+      value={capacity}
+      onChange={(e)=>setCapacity(e.target.value)}
+    />
 
-      {/* Rides Columns */}
+    <button onClick={createRide}>
+      Create Ride
+    </button>
 
-      <div className="rides-container">
+  </div>
 
-        {/* My Rides Column */}
-        <div className="rides-column">
-          <h2>My Rides</h2>
+  {/* Rides */}
 
-          {myRides.map((ride) => (
-            <div key={ride.id} className="ride-card">
-              <p>{ride.standName} → {ride.destination}</p>
-              <p>Passengers: {ride.passengers} / {ride.capacity}</p>
-            
-              <p>Created: {formatDateTime(ride.createdAt)}</p>
-            </div>
-          ))}
+  <div className="rides-container">
+
+    {/* My Rides */}
+
+    <div className="rides-column">
+      <h2>My Rides</h2>
+
+      {myRides.map((ride) => (
+
+        <div key={ride.id} className="ride-card">
+
+          <div className="route">
+            🚖 {ride.standName} → {ride.destination}
+          </div>
+
+          <div className="ride-details">
+            👥 {ride.passengers}/{ride.capacity} seats
+          </div>
+
+          <div className="time">
+            {formatDateTime(ride.createdAt)}
+          </div>
+
         </div>
 
-        {/* Available Rides Column */}
-        <div className="rides-column">
-          <h2>Available Rides</h2>
-
-          {availableRides.map((ride) => (
-            <div key={ride.id} className="ride-card">
-              <p>{ride.standName} → {ride.destination}</p>
-              <p>Passengers: {ride.passengers} / {ride.capacity}</p>
-            
-              <p>Created: {formatDateTime(ride.createdAt)}</p>
-
-              <button
-                disabled={ride.passengers >= ride.capacity}
-                onClick={() => joinRide(ride)}
-              >
-                Join Ride
-              </button>
-
-            </div>
-          ))}
-        </div>
-
-      </div>
+      ))}
 
     </div>
-  );
+
+    {/* Available Rides */}
+
+    <div className="rides-column">
+      <h2>Available</h2>
+
+      {availableRides.map((ride) => (
+
+        <div key={ride.id} className="ride-card">
+
+          <div className="route">
+            🚖 {ride.standName} → {ride.destination}
+          </div>
+
+          <div className="ride-details">
+            👥 {ride.passengers}/{ride.capacity} seats
+          </div>
+
+          <div className="time">
+            {formatDateTime(ride.createdAt)}
+          </div>
+
+          <button
+            className="join-btn"
+            disabled={ride.passengers >= ride.capacity}
+            onClick={()=>joinRide(ride)}
+          >
+            Join Ride
+          </button>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+
+</div>
+
+);
 }
 
 export default App;
