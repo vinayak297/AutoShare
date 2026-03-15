@@ -1,3 +1,4 @@
+const userName = localStorage.getItem("userName") || "User";
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { collection, addDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
@@ -29,7 +30,7 @@ function Chat() {
     const messagesRef = collection(db, "rides", rideId, "messages");
 
     await addDoc(messagesRef, {
-      sender: "User",
+      sender: userName,
       text: text,
       timestamp: serverTimestamp()
     });

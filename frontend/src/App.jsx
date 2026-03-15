@@ -72,6 +72,7 @@ function App() {
   if (ride.passengers >= ride.capacity) return;
 
   const name = prompt("Enter your name");
+  localStorage.setItem("userName", name);
 
   if (!name) return;
 
